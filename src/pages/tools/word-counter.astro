@@ -1,0 +1,187 @@
+---
+import ToolLayout from '../../layouts/ToolLayout.astro';
+
+const toolData = {
+  name: 'Word Counter & Text Analyzer',
+  title: 'Word Counter — Count Words, Characters & Sentences Online',
+  description: 'Fast, real-time word counter and character analysis tool. Accurately calculates words, characters, sentences, paragraphs, reading and speaking time in your browser.',
+  category: 'Text & Writing',
+  categoryHref: '/tools#text',
+  privacyNotice: 'This word counter runs entirely in your web browser. No text or keystrokes are sent across the network or stored on any server.',
+  howToUse: [
+    { step: 'Type or Paste', text: 'Enter or paste your text directly into the editor area below.' },
+    { step: 'View Live Metrics', text: 'Metrics such as word count, reading time, and character count update instantly as you type.' },
+    { step: 'Use Quick Actions', text: 'Use the Copy, Clear, or Sample buttons to quickly manage your text.' },
+  ],
+  features: [
+    'Live word and character count (with & without spaces)',
+    'Sentence and paragraph counters',
+    'Estimated silent reading and speaking duration',
+    'One-click copy and clear actions',
+    'Full offline support — works with zero internet connection once loaded',
+  ],
+  limitations: [
+    'Processing is limited by browser memory for texts larger than 5 million words',
+    'Reading time calculation uses standard 200 words-per-minute heuristic',
+  ],
+  faqs: [
+    {
+      q: 'Is my text private and secure?',
+      a: 'Yes. All text manipulation and calculation occurs within your browser JavaScript engine. No content is sent to our servers.',
+    },
+    {
+      q: 'How is reading time calculated?',
+      a: 'Reading time is estimated based on the average human reading speed of 200 words per minute. Speaking time is calculated at 130 words per minute.',
+    },
+  ],
+};
+---
+
+<ToolLayout {...toolData}>
+  <div class="space-y-6">
+    {/* Quick Stat Cards */}
+    <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
+      <div class="rounded-xl border border-slate-200 bg-slate-50 p-3.5 text-center">
+        <div class="text-xs font-semibold uppercase tracking-wider text-slate-500">Words</div>
+        <div id="stat-words" class="mt-1 text-2xl sm:text-3xl font-extrabold text-blue-600">0</div>
+      </div>
+      <div class="rounded-xl border border-slate-200 bg-slate-50 p-3.5 text-center">
+        <div class="text-xs font-semibold uppercase tracking-wider text-slate-500">Characters</div>
+        <div id="stat-chars" class="mt-1 text-2xl sm:text-3xl font-extrabold text-slate-900">0</div>
+      </div>
+      <div class="rounded-xl border border-slate-200 bg-slate-50 p-3.5 text-center">
+        <div class="text-xs font-semibold uppercase tracking-wider text-slate-500">Sentences</div>
+        <div id="stat-sentences" class="mt-1 text-2xl sm:text-3xl font-extrabold text-slate-900">0</div>
+      </div>
+      <div class="rounded-xl border border-slate-200 bg-slate-50 p-3.5 text-center">
+        <div class="text-xs font-semibold uppercase tracking-wider text-slate-500">Reading Time</div>
+        <div id="stat-readtime" class="mt-1 text-xl sm:text-2xl font-bold text-slate-900">&lt; 1 min</div>
+      </div>
+    </div>
+
+    {/* Textarea Area */}
+    <div class="relative">
+      <textarea
+        id="text-input"
+        rows="10"
+        placeholder="Type or paste your text here..."
+        class="w-full rounded-xl border border-slate-300 p-4 text-base text-slate-900 placeholder:text-slate-400 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/20 font-sans"
+      ></textarea>
+    </div>
+
+    {/* Secondary Stats & Quick Controls */}
+    <div class="flex flex-wrap items-center justify-between gap-4 border-t border-slate-100 pt-4">
+      <div class="flex flex-wrap items-center gap-4 text-xs text-slate-500">
+        <div>Chars (no spaces): <strong id="stat-chars-nospace" class="text-slate-800">0</strong></div>
+        <div>•</div>
+        <div>Paragraphs: <strong id="stat-paragraphs" class="text-slate-800">0</strong></div>
+        <div>•</div>
+        <div>Speaking time: <strong id="stat-speaktime" class="text-slate-800">&lt; 1 min</strong></div>
+      </div>
+
+      <div class="flex items-center gap-2">
+        <button
+          id="btn-sample"
+          type="button"
+          class="rounded-lg border border-slate-200 bg-white px-3 py-1.5 text-xs font-semibold text-slate-700 hover:bg-slate-50 cursor-pointer"
+        >
+          Insert Sample
+        </button>
+        <button
+          id="btn-copy"
+          type="button"
+          class="rounded-lg border border-slate-200 bg-white px-3 py-1.5 text-xs font-semibold text-slate-700 hover:bg-slate-50 cursor-pointer"
+        >
+          Copy Text
+        </button>
+        <button
+          id="btn-clear"
+          type="button"
+          class="rounded-lg border border-red-200 bg-red-50 px-3 py-1.5 text-xs font-semibold text-red-700 hover:bg-red-100 cursor-pointer"
+        >
+          Clear
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const input = document.getElementById('text-input') as HTMLTextAreaElement | null;
+    const statWords = document.getElementById('stat-words');
+    const statChars = document.getElementById('stat-chars');
+    const statCharsNoSpace = document.getElementById('stat-chars-nospace');
+    const statSentences = document.getElementById('stat-sentences');
+    const statParagraphs = document.getElementById('stat-paragraphs');
+    const statReadTime = document.getElementById('stat-readtime');
+    const statSpeakTime = document.getElementById('stat-speaktime');
+
+    const btnSample = document.getElementById('btn-sample');
+    const btnCopy = document.getElementById('btn-copy');
+    const btnClear = document.getElementById('btn-clear');
+
+    function updateStats() {
+      if (!input) return;
+      const text = input.value;
+      
+      // Chars
+      const charCount = text.length;
+      const charNoSpaceCount = text.replace(/\s/g, '').length;
+
+      // Words
+      const trimmed = text.trim();
+      const words = trimmed ? trimmed.split(/\s+/).filter(Boolean) : [];
+      const wordCount = words.length;
+
+      // Sentences
+      const sentences = trimmed ? trimmed.split(/[.!?]+/).filter((s) => s.trim().length > 0) : [];
+      const sentenceCount = sentences.length;
+
+      // Paragraphs
+      const paragraphs = trimmed ? trimmed.split(/\n+/).filter((p) => p.trim().length > 0) : [];
+      const paragraphCount = paragraphs.length;
+
+      // Reading & Speaking times
+      const readMinutes = Math.ceil(wordCount / 200);
+      const speakMinutes = Math.ceil(wordCount / 130);
+
+      if (statWords) statWords.textContent = wordCount.toLocaleString();
+      if (statChars) statChars.textContent = charCount.toLocaleString();
+      if (statCharsNoSpace) statCharsNoSpace.textContent = charNoSpaceCount.toLocaleString();
+      if (statSentences) statSentences.textContent = sentenceCount.toLocaleString();
+      if (statParagraphs) statParagraphs.textContent = paragraphCount.toLocaleString();
+      
+      if (statReadTime) {
+        statReadTime.textContent = wordCount === 0 ? '0 min' : (readMinutes === 1 ? '1 min' : `${readMinutes} mins`);
+      }
+      if (statSpeakTime) {
+        statSpeakTime.textContent = wordCount === 0 ? '0 min' : (speakMinutes === 1 ? '1 min' : `${speakMinutes} mins`);
+      }
+    }
+
+    if (input) {
+      input.addEventListener('input', updateStats);
+    }
+
+    btnSample?.addEventListener('click', () => {
+      if (!input) return;
+      input.value = "ToolXDev provides high-speed, client-side digital utilities designed for productivity and privacy. All computations are handled locally in your browser, ensuring your content is never exposed to remote servers. Try formatting your JSON or compressing your images with zero lag.";
+      updateStats();
+    });
+
+    btnCopy?.addEventListener('click', async () => {
+      if (!input || !input.value) return;
+      await navigator.clipboard.writeText(input.value);
+      const originalText = btnCopy.textContent;
+      btnCopy.textContent = 'Copied!';
+      setTimeout(() => {
+        btnCopy.textContent = originalText;
+      }, 1500);
+    });
+
+    btnClear?.addEventListener('click', () => {
+      if (!input) return;
+      input.value = '';
+      updateStats();
+    });
+  </script>
+</ToolLayout>

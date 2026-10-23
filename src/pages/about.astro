@@ -1,0 +1,38 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+---
+
+<BaseLayout
+  title="About Us — ToolXDev"
+  description="Learn about ToolXDev, our mission for private, high-speed, client-side digital utilities and developer resources."
+>
+  <div class="mx-auto max-w-4xl px-4 py-16 sm:px-6 lg:px-8">
+    <h1 class="text-3xl font-extrabold tracking-tight text-slate-900 sm:text-4xl">About ToolXDev</h1>
+    <p class="mt-4 text-lg text-slate-600 leading-relaxed">
+      ToolXDev was created with a straightforward goal: to provide reliable, fast, and privacy-respecting online tools without user tracking, ads, or paywalls.
+    </p>
+
+    <div class="mt-10 space-y-8 text-sm text-slate-600 leading-relaxed">
+      <div>
+        <h2 class="text-xl font-bold text-slate-900 mb-2">Why Client-Side Matters</h2>
+        <p>
+          Most online utilities send your sensitive text, code, or images across the network to distant servers for processing. At ToolXDev, we believe client-side processing should be the standard. When you format JSON, analyze confidential copy, or compress an image on our site, the work is executed locally in your browser using modern Web APIs.
+        </p>
+      </div>
+
+      <div>
+        <h2 class="text-xl font-bold text-slate-900 mb-2">Zero-Budget Infrastructure Principle</h2>
+        <p>
+          Our platform is architected to operate efficiently on sustainable serverless and static edge hosting. By eliminating unnecessary server compute and database hops for routine utility calculations, we can keep this platform 100% free forever for students, developers, and creators worldwide.
+        </p>
+      </div>
+
+      <div>
+        <h2 class="text-xl font-bold text-slate-900 mb-2">Our Quality Standard</h2>
+        <p>
+          Every tool published on ToolXDev follows strict performance benchmarks: zero cumulative layout shift (CLS), accessible color contrast ratios, clear error notifications, and verified offline capability after initial page load.
+        </p>
+      </div>
+    </div>
+  </div>
+</BaseLayout>

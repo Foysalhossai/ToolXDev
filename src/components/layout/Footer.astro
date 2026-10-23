@@ -1,0 +1,75 @@
+---
+const currentYear = new Date().getFullYear();
+
+const categories = [
+  { label: 'Word Counter', href: '/tools/word-counter' },
+  { label: 'JSON Formatter', href: '/tools/json-formatter' },
+  { label: 'Image Compressor', href: '/tools/image-compressor' },
+];
+
+const company = [
+  { label: 'About Us', href: '/about' },
+  { label: 'Contact & Feedback', href: '/contact' },
+  { label: 'Privacy Policy', href: '/privacy' },
+  { label: 'Terms of Service', href: '/terms' },
+];
+---
+
+<footer class="border-t border-slate-200 bg-slate-50 text-slate-600">
+  <div class="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
+    <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+      <div class="md:col-span-2">
+        <a href="/" class="flex items-center gap-2 font-bold text-lg text-slate-900 mb-3">
+          <div class="flex h-7 w-7 items-center justify-center rounded-md bg-blue-600 text-white">
+            <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+              <polyline points="16 18 22 12 16 6"></polyline>
+              <polyline points="8 6 2 12 8 18"></polyline>
+            </svg>
+          </div>
+          <span>Tool<span class="text-blue-600">X</span>Dev</span>
+        </a>
+        <p class="text-sm text-slate-500 max-w-sm mb-4 leading-relaxed">
+          Fast, privacy-friendly online utilities for developers and creators. All client-side tools process data directly in your browser.
+        </p>
+        <div class="text-xs text-slate-400">
+          Domain: <code class="font-mono text-slate-600">toolxdev.org</code> • Free forever
+        </div>
+      </div>
+
+      <div>
+        <h3 class="text-xs font-semibold uppercase tracking-wider text-slate-900 mb-3">Popular Tools</h3>
+        <ul class="space-y-2 text-sm">
+          {categories.map((item) => (
+            <li>
+              <a href={item.href} class="hover:text-blue-600 transition-colors">
+                {item.label}
+              </a>
+            </li>
+          ))}
+        </ul>
+      </div>
+
+      <div>
+        <h3 class="text-xs font-semibold uppercase tracking-wider text-slate-900 mb-3">Platform</h3>
+        <ul class="space-y-2 text-sm">
+          {company.map((item) => (
+            <li>
+              <a href={item.href} class="hover:text-blue-600 transition-colors">
+                {item.label}
+              </a>
+            </li>
+          ))}
+        </ul>
+      </div>
+    </div>
+
+    <div class="mt-8 pt-8 border-t border-slate-200 flex flex-col sm:flex-row justify-between items-center text-xs text-slate-500 gap-4">
+      <p>&copy; {currentYear} ToolXDev. All rights reserved.</p>
+      <p class="flex items-center gap-2">
+        <span>Privacy-first</span>
+        <span>•</span>
+        <span>Zero tracking on tool inputs</span>
+      </p>
+    </div>
+  </div>
+</footer>
