@@ -1,0 +1,59 @@
+backend:
+  name: git-gateway
+  branch: main
+
+local_backend: true
+
+media_folder: "public/uploads"
+public_folder: "/uploads"
+
+collections:
+  - name: "tools"
+    label: "Tools"
+    folder: "src/content/tools"
+    create: true
+    format: "json"
+    slug: "{{slug}}"
+    fields:
+      - { label: "Tool Name", name: "name", widget: "string" }
+      - { label: "Short Description", name: "shortDescription", widget: "string" }
+      - { label: "Category", name: "category", widget: "string" }
+      - { label: "Category ID", name: "categoryId", widget: "select", options: ["developer", "text", "image", "security"] }
+      - { label: "Execution Mode", name: "executionMode", widget: "select", options: ["client", "worker", "background"], default: "client" }
+      - { label: "Implementation ID", name: "implementationId", widget: "string", hint: "Must match a registered ID in TOOL_REGISTRY" }
+      - { label: "Privacy Notice", name: "privacyNotice", widget: "string" }
+      - label: "How To Use Steps"
+        name: "howToUse"
+        widget: "list"
+        fields:
+          - { label: "Step Title", name: "step", widget: "string" }
+          - { label: "Instruction Text", name: "text", widget: "string" }
+      - { label: "Features", name: "features", widget: "list" }
+      - { label: "Limitations", name: "limitations", widget: "list" }
+      - label: "FAQs"
+        name: "faqs"
+        widget: "list"
+        fields:
+          - { label: "Question", name: "q", widget: "string" }
+          - { label: "Answer", name: "a", widget: "text" }
+      - { label: "Related Tool Slugs", name: "relatedTools", widget: "list", required: false }
+      - { label: "SEO Title", name: "seoTitle", widget: "string" }
+      - { label: "SEO Description", name: "seoDescription", widget: "text" }
+      - { label: "Status", name: "status", widget: "select", options: ["published", "draft"], default: "published" }
+      - { label: "Featured on Homepage", name: "featured", widget: "boolean", default: false }
+
+  - name: "blog"
+    label: "Blog Posts"
+    folder: "src/content/blog"
+    create: true
+    slug: "{{slug}}"
+    fields:
+      - { label: "Title", name: "title", widget: "string" }
+      - { label: "Description", name: "description", widget: "text" }
+      - { label: "Published Date", name: "publishedDate", widget: "datetime" }
+      - { label: "Author", name: "author", widget: "string", default: "ToolXDev Team" }
+      - { label: "Category", name: "category", widget: "string" }
+      - { label: "Tags", name: "tags", widget: "list", required: false }
+      - { label: "Status", name: "status", widget: "select", options: ["published", "draft"], default: "published" }
+      - { label: "Featured", name: "featured", widget: "boolean", default: false }
+      - { label: "Body", name: "body", widget: "markdown" }

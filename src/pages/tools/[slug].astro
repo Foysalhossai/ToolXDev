@@ -1,0 +1,37 @@
+---
+import { getCollection } from 'astro:content';
+import ToolLayout from '../../layouts/ToolLayout.astro';
+import { getToolComponent } from '../../lib/tool-registry';
+
+export async function getStaticPaths() {
+  const tools = await getCollection('tools');
+  return tools.map((tool) => ({
+    params: { slug: tool.id.replace(/\.(json|md)$/, '') },
+    props: { tool },
+  }));
+}
+
+const { tool } = Astro.props;
+const data = tool.data;
+const ToolComponent = getToolComponent(data.implementationId);
+
+if (!ToolComponent) {
+  throw new Error(`Tool implementation '${data.implementationId}' is not registered in TOOL_REGISTRY.`);
+}
+---
+
+<ToolLayout
+  title={data.seoTitle}
+  description={data.seoDescription}
+  toolName={data.name}
+  shortDescription={data.shortDescription}
+  category={data.category}
+  privacyNotice={data.privacyNotice}
+  howToUse={data.howToUse}
+  features={data.features}
+  limitations={data.limitations}
+  faqs={data.faqs}
+  relatedTools={data.relatedTools}
+>
+  <ToolComponent />
+</ToolLayout>

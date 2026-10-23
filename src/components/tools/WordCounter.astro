@@ -1,0 +1,132 @@
+---
+// WordCounter.astro
+---
+
+<div class="tool-panel rounded-2xl border border-slate-200 bg-white p-6 sm:p-8 shadow-xs">
+  <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 border-b border-slate-100 pb-4 mb-6">
+    <div class="flex items-center gap-2">
+      <span class="inline-flex h-2.5 w-2.5 rounded-full bg-emerald-500 animate-pulse"></span>
+      <span class="text-xs font-semibold text-slate-700 uppercase tracking-wider">Live Character & Word Analyzer</span>
+    </div>
+    <div class="flex gap-2">
+      <button id="btn-sample" type="button" class="rounded-lg border border-slate-200 bg-slate-50 px-3 py-1.5 text-xs font-medium text-slate-700 hover:bg-slate-100 cursor-pointer transition-colors">
+        Sample Text
+      </button>
+      <button id="btn-clear" type="button" class="rounded-lg border border-slate-200 bg-slate-50 px-3 py-1.5 text-xs font-medium text-red-600 hover:bg-red-50 cursor-pointer transition-colors">
+        Clear
+      </button>
+      <button id="btn-copy" type="button" class="rounded-lg bg-blue-600 px-3 py-1.5 text-xs font-medium text-white hover:bg-blue-700 cursor-pointer transition-colors">
+        Copy Text
+      </button>
+    </div>
+  </div>
+
+  <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-6">
+    <div class="rounded-xl border border-slate-100 bg-slate-50/50 p-4 text-center">
+      <div id="stat-words" class="text-3xl font-extrabold text-blue-600">0</div>
+      <div class="mt-1 text-xs font-medium text-slate-500 uppercase tracking-wider">Words</div>
+    </div>
+    <div class="rounded-xl border border-slate-100 bg-slate-50/50 p-4 text-center">
+      <div id="stat-chars" class="text-3xl font-extrabold text-slate-900">0</div>
+      <div class="mt-1 text-xs font-medium text-slate-500 uppercase tracking-wider">Characters</div>
+    </div>
+    <div class="rounded-xl border border-slate-100 bg-slate-50/50 p-4 text-center">
+      <div id="stat-chars-nospace" class="text-3xl font-extrabold text-slate-900">0</div>
+      <div class="mt-1 text-xs font-medium text-slate-500 uppercase tracking-wider">No Spaces</div>
+    </div>
+    <div class="rounded-xl border border-slate-100 bg-slate-50/50 p-4 text-center">
+      <div id="stat-sentences" class="text-3xl font-extrabold text-slate-900">0</div>
+      <div class="mt-1 text-xs font-medium text-slate-500 uppercase tracking-wider">Sentences</div>
+    </div>
+  </div>
+
+  <div class="relative">
+    <label for="text-input" class="sr-only">Input Text</label>
+    <textarea
+      id="text-input"
+      rows="10"
+      placeholder="Type or paste your text here to begin instant real-time analysis..."
+      class="w-full rounded-xl border border-slate-300 p-4 font-mono text-sm leading-relaxed text-slate-900 placeholder:text-slate-400 focus:border-blue-500 focus:outline-none"
+    ></textarea>
+  </div>
+
+  <div class="mt-4 flex flex-wrap items-center justify-between gap-4 text-xs font-medium text-slate-500 border-t border-slate-100 pt-4">
+    <div class="flex gap-4">
+      <span>Paragraphs: <strong id="stat-paragraphs" class="text-slate-800">0</strong></span>
+      <span>Lines: <strong id="stat-lines" class="text-slate-800">0</strong></span>
+    </div>
+    <div class="flex gap-4">
+      <span>Est. Reading Time: <strong id="stat-reading" class="text-slate-800">0 sec</strong></span>
+      <span>Est. Speaking Time: <strong id="stat-speaking" class="text-slate-800">0 sec</strong></span>
+    </div>
+  </div>
+</div>
+
+<script>
+  const input = document.getElementById('text-input') as HTMLTextAreaElement | null;
+  const statWords = document.getElementById('stat-words');
+  const statChars = document.getElementById('stat-chars');
+  const statCharsNoSpace = document.getElementById('stat-chars-nospace');
+  const statSentences = document.getElementById('stat-sentences');
+  const statParagraphs = document.getElementById('stat-paragraphs');
+  const statLines = document.getElementById('stat-lines');
+  const statReading = document.getElementById('stat-reading');
+  const statSpeaking = document.getElementById('stat-speaking');
+
+  const btnSample = document.getElementById('btn-sample');
+  const btnClear = document.getElementById('btn-clear');
+  const btnCopy = document.getElementById('btn-copy');
+
+  function analyzeText(text: string) {
+    const chars = text.length;
+    const charsNoSpace = text.replace(/\s/g, '').length;
+    const trimmed = text.trim();
+    const words = trimmed ? trimmed.split(/\s+/).length : 0;
+    const sentences = trimmed ? (trimmed.match(/[.!?]+(?:\s|$)/g) || []).length || (trimmed.length > 0 ? 1 : 0) : 0;
+    const paragraphs = trimmed ? trimmed.split(/\n\s*\n/).filter(p => p.trim().length > 0).length : 0;
+    const lines = text ? text.split('\n').length : 0;
+
+    const readSeconds = Math.ceil((words / 200) * 60);
+    const speakSeconds = Math.ceil((words / 130) * 60);
+
+    if (statWords) statWords.textContent = words.toLocaleString();
+    if (statChars) statChars.textContent = chars.toLocaleString();
+    if (statCharsNoSpace) statCharsNoSpace.textContent = charsNoSpace.toLocaleString();
+    if (statSentences) statSentences.textContent = sentences.toLocaleString();
+    if (statParagraphs) statParagraphs.textContent = paragraphs.toLocaleString();
+    if (statLines) statLines.textContent = lines.toLocaleString();
+
+    if (statReading) {
+      statReading.textContent = readSeconds < 60 ? `${readSeconds} sec` : `${Math.ceil(readSeconds / 60)} min`;
+    }
+    if (statSpeaking) {
+      statSpeaking.textContent = speakSeconds < 60 ? `${speakSeconds} sec` : `${Math.ceil(speakSeconds / 60)} min`;
+    }
+  }
+
+  input?.addEventListener('input', (e) => {
+    analyzeText((e.target as HTMLTextAreaElement).value);
+  });
+
+  btnSample?.addEventListener('click', () => {
+    if (!input) return;
+    input.value = "ToolXDev is an ultra-fast, zero-budget developer toolkit designed for maximum efficiency and total privacy.\n\nEverything runs directly inside your web browser. No files or text ever leave your device!";
+    analyzeText(input.value);
+  });
+
+  btnClear?.addEventListener('click', () => {
+    if (!input) return;
+    input.value = '';
+    analyzeText('');
+  });
+
+  btnCopy?.addEventListener('click', async () => {
+    if (!input || !input.value) return;
+    await navigator.clipboard.writeText(input.value);
+    const originalText = btnCopy.textContent;
+    btnCopy.textContent = 'Copied!';
+    setTimeout(() => {
+      btnCopy.textContent = originalText;
+    }, 1500);
+  });
+</script>

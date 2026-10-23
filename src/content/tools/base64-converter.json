@@ -1,0 +1,51 @@
+{
+  "name": "Base64 Encoder & Decoder",
+  "shortDescription": "Encode and decode plain text or binary strings safely in Base64 format.",
+  "category": "Developer Tools",
+  "categoryId": "developer",
+  "executionMode": "client",
+  "implementationId": "base64-converter",
+  "privacyNotice": "100% Client-Side. Your strings, tokens, and payloads are converted locally without server contact.",
+  "howToUse": [
+    {
+      "step": "1. Choose Mode",
+      "text": "Select 'Encode' to convert text to Base64 or 'Decode' to parse Base64 back to text."
+    },
+    {
+      "step": "2. Input Content",
+      "text": "Type or paste your content in the input field."
+    },
+    {
+      "step": "3. Copy Result",
+      "text": "The converted result appears instantly. Click 'Copy Output' to use it."
+    }
+  ],
+  "features": [
+    "Instant real-time encoding and decoding",
+    "Full UTF-8 Unicode character support",
+    "Detailed error reporting on invalid Base64 input strings",
+    "One-click copy to clipboard",
+    "100% offline capability"
+  ],
+  "limitations": [
+    "Intended for text and standard data strings (large binary file encoding requires sufficient browser RAM)"
+  ],
+  "faqs": [
+    {
+      "q": "What is Base64 encoding used for?",
+      "a": "Base64 is designed to represent binary data in an ASCII string format, commonly used in email headers, HTTP authorization tokens, and data URIs."
+    },
+    {
+      "q": "Is Base64 an encryption method?",
+      "a": "No. Base64 is an encoding scheme, not an encryption technique. It does not provide cryptographic secrecy."
+    }
+  ],
+  "relatedTools": [
+    "/tools/json-formatter",
+    "/tools/hash-generator"
+  ],
+  "seoTitle": "Free Online Base64 Encoder & Decoder — ToolXDev",
+  "seoDescription": "Encode and decode Base64 strings online in real-time. Secure UTF-8 compliant client-side processing with zero server transmission.",
+  "status": "published",
+  "featured": false
+}

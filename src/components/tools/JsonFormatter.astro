@@ -1,0 +1,144 @@
+---
+// JsonFormatter.astro
+---
+
+<div class="tool-panel rounded-2xl border border-slate-200 bg-white p-6 sm:p-8 shadow-xs">
+  <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 border-b border-slate-100 pb-4 mb-6">
+    <div class="flex items-center gap-2">
+      <span class="inline-flex h-2.5 w-2.5 rounded-full bg-blue-500 animate-pulse"></span>
+      <span class="text-xs font-semibold text-slate-700 uppercase tracking-wider">JSON Beautifier & Validator</span>
+    </div>
+    <div class="flex flex-wrap gap-2">
+      <button id="btn-sample-json" type="button" class="rounded-lg border border-slate-200 bg-slate-50 px-3 py-1.5 text-xs font-medium text-slate-700 hover:bg-slate-100 cursor-pointer transition-colors">
+        Sample
+      </button>
+      <button id="btn-format-2" type="button" class="rounded-lg bg-blue-600 px-3 py-1.5 text-xs font-medium text-white hover:bg-blue-700 cursor-pointer transition-colors">
+        Format 2 Spaces
+      </button>
+      <button id="btn-format-4" type="button" class="rounded-lg border border-slate-200 bg-slate-50 px-3 py-1.5 text-xs font-medium text-slate-700 hover:bg-slate-100 cursor-pointer transition-colors">
+        Format 4 Spaces
+      </button>
+      <button id="btn-minify" type="button" class="rounded-lg border border-slate-200 bg-slate-50 px-3 py-1.5 text-xs font-medium text-slate-700 hover:bg-slate-100 cursor-pointer transition-colors">
+        Minify
+      </button>
+      <button id="btn-clear-json" type="button" class="rounded-lg border border-slate-200 bg-slate-50 px-3 py-1.5 text-xs font-medium text-red-600 hover:bg-red-50 cursor-pointer transition-colors">
+        Clear
+      </button>
+    </div>
+  </div>
+
+  <div id="status-bar" class="hidden mb-4 rounded-xl p-3 text-xs font-medium transition-all"></div>
+
+  <div class="relative">
+    <label for="json-input" class="sr-only">Input JSON</label>
+    <textarea
+      id="json-input"
+      rows="14"
+      placeholder="Paste your unformatted or unminified JSON string here..."
+      class="w-full rounded-xl border border-slate-300 p-4 font-mono text-sm leading-relaxed text-slate-900 placeholder:text-slate-400 focus:border-blue-500 focus:outline-none"
+    ></textarea>
+  </div>
+
+  <div class="mt-4 flex flex-wrap items-center justify-between gap-4 text-xs font-medium text-slate-500 border-t border-slate-100 pt-4">
+    <div class="flex gap-4">
+      <span>Payload Size: <strong id="stat-json-size" class="text-slate-800">0 B</strong></span>
+      <span>Lines: <strong id="stat-json-lines" class="text-slate-800">0</strong></span>
+    </div>
+    <div>
+      <button id="btn-copy-json" type="button" class="rounded-lg bg-slate-900 px-3 py-1.5 text-xs font-medium text-white hover:bg-slate-800 cursor-pointer transition-colors">
+        Copy Output
+      </button>
+    </div>
+  </div>
+</div>
+
+<script>
+  const jsonInput = document.getElementById('json-input') as HTMLTextAreaElement | null;
+  const statusBar = document.getElementById('status-bar');
+  const statJsonSize = document.getElementById('stat-json-size');
+  const statJsonLines = document.getElementById('stat-json-lines');
+
+  const btnSample = document.getElementById('btn-sample-json');
+  const btnFormat2 = document.getElementById('btn-format-2');
+  const btnFormat4 = document.getElementById('btn-format-4');
+  const btnMinify = document.getElementById('btn-minify');
+  const btnClear = document.getElementById('btn-clear-json');
+  const btnCopy = document.getElementById('btn-copy-json');
+
+  function updateMetrics(str: string) {
+    if (!statJsonSize || !statJsonLines) return;
+    const bytes = new Blob([str]).size;
+    statJsonSize.textContent = bytes < 1024 ? `${bytes} B` : `${(bytes / 1024).toFixed(2)} KB`;
+    statJsonLines.textContent = str ? str.split('\n').length.toString() : '0';
+  }
+
+  function setStatus(message: string, isError: boolean) {
+    if (!statusBar) return;
+    statusBar.classList.remove('hidden', 'bg-red-50', 'text-red-700', 'border-red-200', 'bg-emerald-50', 'text-emerald-700', 'border-emerald-200');
+    if (isError) {
+      statusBar.classList.add('bg-red-50', 'text-red-700', 'border', 'border-red-200');
+      statusBar.textContent = `❌ ${message}`;
+    } else {
+      statusBar.classList.add('bg-emerald-50', 'text-emerald-700', 'border', 'border-emerald-200');
+      statusBar.textContent = `✓ ${message}`;
+    }
+  }
+
+  function processJson(indent: number | null) {
+    if (!jsonInput || !jsonInput.value.trim()) {
+      setStatus('Please enter or paste JSON to format', true);
+      return;
+    }
+    try {
+      const parsed = JSON.parse(jsonInput.value);
+      const formatted = indent !== null ? JSON.stringify(parsed, null, indent) : JSON.stringify(parsed);
+      jsonInput.value = formatted;
+      setStatus(indent !== null ? `Valid JSON formatted with ${indent} spaces` : 'Valid JSON minified successfully', false);
+      updateMetrics(formatted);
+    } catch (err: any) {
+      setStatus(`Invalid JSON Syntax: ${err.message}`, true);
+    }
+  }
+
+  jsonInput?.addEventListener('input', () => {
+    if (!jsonInput) return;
+    updateMetrics(jsonInput.value);
+  });
+
+  btnFormat2?.addEventListener('click', () => processJson(2));
+  btnFormat4?.addEventListener('click', () => processJson(4));
+  btnMinify?.addEventListener('click', () => processJson(null));
+
+  btnClear?.addEventListener('click', () => {
+    if (!jsonInput) return;
+    jsonInput.value = '';
+    updateMetrics('');
+    if (statusBar) statusBar.classList.add('hidden');
+  });
+
+  btnSample?.addEventListener('click', () => {
+    if (!jsonInput) return;
+    const sample = {
+      project: "ToolXDev",
+      author: "Open Source Community",
+      architecture: {
+        hosting: "Cloudflare Static Assets",
+        processing: "Client-Side Web APIs",
+        price: 0
+      },
+      tools: ["Word Counter", "JSON Formatter", "Image Compressor"]
+    };
+    jsonInput.value = JSON.stringify(sample);
+    processJson(2);
+  });
+
+  btnCopy?.addEventListener('click', async () => {
+    if (!jsonInput || !jsonInput.value) return;
+    await navigator.clipboard.writeText(jsonInput.value);
+    const orig = btnCopy.textContent;
+    btnCopy.textContent = 'Copied!';
+    setTimeout(() => {
+      btnCopy.textContent = orig;
+    }, 1500);
+  });
+</script>

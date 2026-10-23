@@ -1,0 +1,53 @@
+{
+  "name": "Word Counter & Text Analyzer",
+  "shortDescription": "Instant word, character, sentence, and reading duration statistics in real-time.",
+  "category": "Text & Content",
+  "categoryId": "text",
+  "executionMode": "client",
+  "implementationId": "word-counter",
+  "privacyNotice": "100% Client-Side. Your text is processed strictly in your local browser memory and never transmitted over the network.",
+  "howToUse": [
+    {
+      "step": "1. Paste or Type Text",
+      "text": "Paste your article, essay, or snippet into the main text box above."
+    },
+    {
+      "step": "2. Instant Statistics",
+      "text": "Metrics like words, characters with/without spaces, and reading speed calculate in real-time as you type."
+    },
+    {
+      "step": "3. Copy or Reset",
+      "text": "Use the Copy button to take your edited copy, or Clear to start fresh."
+    }
+  ],
+  "features": [
+    "Real-time word, character, and sentence count",
+    "Characters excluding spaces calculation",
+    "Paragraph and line counter",
+    "Estimated silent reading duration (200 wpm standard)",
+    "Estimated speaking duration (130 wpm standard)",
+    "Zero network requests for total privacy"
+  ],
+  "limitations": [
+    "Supports browser-supported Unicode and UTF-8 characters",
+    "Very large texts (>10 MB) might briefly freeze slower mobile devices"
+  ],
+  "faqs": [
+    {
+      "q": "Does ToolXDev store or read my text?",
+      "a": "No. The word counting algorithm runs entirely inside your browser using JavaScript. No text is ever uploaded or saved."
+    },
+    {
+      "q": "Can I use this tool offline?",
+      "a": "Yes. Once the page is loaded, you can disconnect your internet and continue analyzing text without interruption."
+    }
+  ],
+  "relatedTools": [
+    "/tools/json-formatter",
+    "/tools/base64-converter"
+  ],
+  "seoTitle": "Free Online Word Counter & Character Analyzer — ToolXDev",
+  "seoDescription": "Accurate, real-time word counter and character calculator. Free, offline-capable, and 100% private with no server uploads.",
+  "status": "published",
+  "featured": true
+}

@@ -1,0 +1,133 @@
+---
+// HashGenerator.astro
+---
+
+<div class="tool-panel rounded-2xl border border-slate-200 bg-white p-6 sm:p-8 shadow-xs">
+  <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 border-b border-slate-100 pb-4 mb-6">
+    <div class="flex items-center gap-2">
+      <span class="inline-flex h-2.5 w-2.5 rounded-full bg-amber-500 animate-pulse"></span>
+      <span class="text-xs font-semibold text-slate-700 uppercase tracking-wider">Web Crypto Hash Generator</span>
+    </div>
+    <div class="text-xs text-slate-500 font-medium">
+      Hardware-Accelerated Web Crypto API
+    </div>
+  </div>
+
+  <div class="mb-6">
+    <label for="hash-input" class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-2">
+      Input String
+    </label>
+    <textarea
+      id="hash-input"
+      rows="4"
+      placeholder="Type or paste any text to generate cryptographic hashes instantly..."
+      class="w-full rounded-xl border border-slate-300 p-4 font-mono text-sm leading-relaxed text-slate-900 placeholder:text-slate-400 focus:border-blue-500 focus:outline-none"
+    ></textarea>
+  </div>
+
+  <div class="space-y-4">
+    <!-- SHA-256 -->
+    <div class="rounded-xl border border-slate-200 bg-slate-50/50 p-4">
+      <div class="flex justify-between items-center mb-1.5">
+        <span class="text-xs font-bold text-slate-700">SHA-256</span>
+        <button data-target="hash-sha256" class="btn-copy-hash text-xs font-semibold text-blue-600 hover:text-blue-700 cursor-pointer">
+          Copy
+        </button>
+      </div>
+      <input id="hash-sha256" type="text" readonly class="w-full bg-white border border-slate-200 rounded-lg p-2.5 font-mono text-xs text-slate-800 select-all" placeholder="e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855" />
+    </div>
+
+    <!-- SHA-512 -->
+    <div class="rounded-xl border border-slate-200 bg-slate-50/50 p-4">
+      <div class="flex justify-between items-center mb-1.5">
+        <span class="text-xs font-bold text-slate-700">SHA-512</span>
+        <button data-target="hash-sha512" class="btn-copy-hash text-xs font-semibold text-blue-600 hover:text-blue-700 cursor-pointer">
+          Copy
+        </button>
+      </div>
+      <input id="hash-sha512" type="text" readonly class="w-full bg-white border border-slate-200 rounded-lg p-2.5 font-mono text-xs text-slate-800 select-all" placeholder="cf83e1357eefb8bdf1542850d66d8007d620e4050b5715dc83f4a921d36ce9ce47d0d13c5d85f2b0ff8318d2877eec2f63b931bd47417a81a538327af927da3e" />
+    </div>
+
+    <!-- SHA-384 -->
+    <div class="rounded-xl border border-slate-200 bg-slate-50/50 p-4">
+      <div class="flex justify-between items-center mb-1.5">
+        <span class="text-xs font-bold text-slate-700">SHA-384</span>
+        <button data-target="hash-sha384" class="btn-copy-hash text-xs font-semibold text-blue-600 hover:text-blue-700 cursor-pointer">
+          Copy
+        </button>
+      </div>
+      <input id="hash-sha384" type="text" readonly class="w-full bg-white border border-slate-200 rounded-lg p-2.5 font-mono text-xs text-slate-800 select-all" placeholder="38b060a751ac96384cd9327eb1b1e36a21fdb71114be07434c0cc7bf63f6e1da274edebfe76f65fbd51ad2f14898b95b" />
+    </div>
+
+    <!-- SHA-1 -->
+    <div class="rounded-xl border border-slate-200 bg-slate-50/50 p-4">
+      <div class="flex justify-between items-center mb-1.5">
+        <span class="text-xs font-bold text-slate-700">SHA-1 (Legacy)</span>
+        <button data-target="hash-sha1" class="btn-copy-hash text-xs font-semibold text-blue-600 hover:text-blue-700 cursor-pointer">
+          Copy
+        </button>
+      </div>
+      <input id="hash-sha1" type="text" readonly class="w-full bg-white border border-slate-200 rounded-lg p-2.5 font-mono text-xs text-slate-800 select-all" placeholder="da39a3ee5e6b4b0d3255bfef95601890afd80709" />
+    </div>
+  </div>
+</div>
+
+<script>
+  const hashInput = document.getElementById('hash-input') as HTMLTextAreaElement | null;
+  const sha256Output = document.getElementById('hash-sha256') as HTMLInputElement | null;
+  const sha512Output = document.getElementById('hash-sha512') as HTMLInputElement | null;
+  const sha384Output = document.getElementById('hash-sha384') as HTMLInputElement | null;
+  const sha1Output = document.getElementById('hash-sha1') as HTMLInputElement | null;
+
+  async function computeHash(algo: string, message: string): Promise<string> {
+    const msgBuffer = new TextEncoder().encode(message);
+    const hashBuffer = await crypto.subtle.digest(algo, msgBuffer);
+    const hashArray = Array.from(new Uint8Array(hashBuffer));
+    return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+  }
+
+  async function updateHashes() {
+    const val = hashInput ? hashInput.value : '';
+    if (!val) {
+      if (sha256Output) sha256Output.value = '';
+      if (sha512Output) sha512Output.value = '';
+      if (sha384Output) sha384Output.value = '';
+      if (sha1Output) sha1Output.value = '';
+      return;
+    }
+
+    try {
+      const [h256, h512, h384, h1] = await Promise.all([
+        computeHash('SHA-256', val),
+        computeHash('SHA-512', val),
+        computeHash('SHA-384', val),
+        computeHash('SHA-1', val)
+      ]);
+
+      if (sha256Output) sha256Output.value = h256;
+      if (sha512Output) sha512Output.value = h512;
+      if (sha384Output) sha384Output.value = h384;
+      if (sha1Output) sha1Output.value = h1;
+    } catch (e) {
+      console.error(e);
+    }
+  }
+
+  hashInput?.addEventListener('input', updateHashes);
+
+  document.querySelectorAll('.btn-copy-hash').forEach((btn) => {
+    btn.addEventListener('click', async () => {
+      const targetId = btn.getAttribute('data-target');
+      if (!targetId) return;
+      const targetInput = document.getElementById(targetId) as HTMLInputElement | null;
+      if (!targetInput || !targetInput.value) return;
+
+      await navigator.clipboard.writeText(targetInput.value);
+      const original = btn.textContent;
+      btn.textContent = 'Copied!';
+      setTimeout(() => {
+        btn.textContent = original;
+      }, 1500);
+    });
+  });
+</script>

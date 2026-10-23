@@ -1,41 +1,19 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
+import { getCollection } from 'astro:content';
 
-const featuredTools = [
-  {
-    name: 'Word Counter',
-    slug: 'word-counter',
-    category: 'Text & Writing',
-    description: 'Instant word, character, sentence, and reading time counter. Real-time stats with zero lag.',
-    badge: 'Fast & Offline',
-    icon: 'text',
-    href: '/tools/word-counter',
-  },
-  {
-    name: 'JSON Formatter & Validator',
-    slug: 'json-formatter',
-    category: 'Developer',
-    description: 'Format, validate, beautify, and minify JSON strings with error highlighting and line numbers.',
-    badge: '100% Private',
-    icon: 'code',
-    href: '/tools/json-formatter',
-  },
-  {
-    name: 'Image Compressor',
-    slug: 'image-compressor',
-    category: 'Media & Images',
-    description: 'Compress PNG, JPEG, and WebP files directly in your browser without uploading to any server.',
-    badge: 'Client-Side',
-    icon: 'image',
-    href: '/tools/image-compressor',
-  },
-];
+const allTools = await getCollection('tools', ({ data }) => data.status === 'published');
+const featuredTools = allTools.filter(t => t.data.featured);
+
+const devCount = allTools.filter(t => t.data.categoryId === 'developer').length;
+const textCount = allTools.filter(t => t.data.categoryId === 'text').length;
+const imageCount = allTools.filter(t => t.data.categoryId === 'image').length;
 
 const categories = [
-  { name: 'Developer Tools', count: '1 Tool', href: '/tools#developer', desc: 'Formatters, validators, and code utilities' },
-  { name: 'Text & Content', count: '1 Tool', href: '/tools#text', desc: 'Word count, character analysis, string tools' },
-  { name: 'Image & Media', count: '1 Tool', href: '/tools#image', desc: 'Optimization, resizing, format conversion' },
-  { name: 'Web & Security', count: 'Coming Soon', href: '/tools#web', desc: 'Meta tags, headers, DNS checkers' },
+  { name: 'Developer Tools', count: `${devCount} Tools`, href: '/tools#developer', desc: 'Formatters, validators, hashes, and code utilities' },
+  { name: 'Text & Content', count: `${textCount} Tools`, href: '/tools#text', desc: 'Word count, character analysis, and slug generators' },
+  { name: 'Image & Media', count: `${imageCount} Tool`, href: '/tools#image', desc: 'Optimization, resizing, and format conversion' },
+  { name: 'Web & Security', count: 'Coming Soon', href: '/tools', desc: 'Headers, meta tags, and DNS analyzers' },
 ];
 ---
 
@@ -48,7 +26,7 @@ const categories = [
     <div class="mx-auto max-w-4xl text-center">
       <div class="inline-flex items-center gap-2 rounded-full border border-blue-200 bg-blue-50 px-3.5 py-1 text-xs font-semibold text-blue-700 mb-6">
         <span class="h-1.5 w-1.5 rounded-full bg-blue-600 animate-pulse"></span>
-        Zero Latency • Local Browser Processing
+        Zero Latency • 100% Client-Side Processing
       </div>
       
       <h1 class="text-4xl font-extrabold tracking-tight text-slate-900 sm:text-5xl lg:text-6xl">
@@ -60,13 +38,13 @@ const categories = [
         No accounts, no paywalls, and no invasive tracking. ToolXDev runs computations on your device so your data stays confidential.
       </p>
 
-      {/* Quick Search / Filter Bar */}
+      {/* Quick Search Bar */}
       <div class="mx-auto mt-10 max-w-xl">
         <div class="relative flex items-center">
           <input
             id="tool-search"
             type="search"
-            placeholder="Search tools (e.g., json, word counter, image)..."
+            placeholder="Search tools (e.g., json, hash, base64, image)..."
             class="w-full rounded-xl border border-slate-300 bg-white px-4 py-3.5 pl-11 text-sm text-slate-900 shadow-sm placeholder:text-slate-400 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/20"
           />
           <div class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3.5 text-slate-400">
@@ -88,7 +66,7 @@ const categories = [
         <p class="mt-1 text-sm text-slate-500">Essential tools tested for high performance and offline reliability.</p>
       </div>
       <a href="/tools" class="inline-flex items-center gap-1.5 text-sm font-semibold text-blue-600 hover:text-blue-700">
-        View all tools
+        View all {allTools.length} tools
         <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
           <polyline points="9 18 15 12 9 6"></polyline>
         </svg>
@@ -96,39 +74,42 @@ const categories = [
     </div>
 
     <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-      {featuredTools.map((tool) => (
-        <a
-          href={tool.href}
-          class="tool-card group flex flex-col justify-between rounded-2xl border border-slate-200 bg-white p-6 shadow-xs hover:border-blue-300 cursor-pointer"
-        >
-          <div>
-            <div class="flex items-center justify-between mb-4">
-              <span class="inline-flex items-center rounded-md bg-slate-100 px-2.5 py-1 text-xs font-medium text-slate-700">
-                {tool.category}
-              </span>
-              <span class="inline-flex items-center rounded-full bg-emerald-50 px-2.5 py-0.5 text-xs font-medium text-emerald-700 border border-emerald-200">
-                {tool.badge}
-              </span>
+      {featuredTools.map((tool) => {
+        const slug = tool.id.replace(/\.(json|md)$/, '');
+        return (
+          <a
+            href={`/tools/${slug}`}
+            class="tool-card group flex flex-col justify-between rounded-2xl border border-slate-200 bg-white p-6 shadow-xs hover:border-blue-300 cursor-pointer"
+          >
+            <div>
+              <div class="flex items-center justify-between mb-4">
+                <span class="inline-flex items-center rounded-md bg-slate-100 px-2.5 py-1 text-xs font-medium text-slate-700">
+                  {tool.data.category}
+                </span>
+                <span class="inline-flex items-center rounded-full bg-emerald-50 px-2.5 py-0.5 text-xs font-medium text-emerald-700 border border-emerald-200">
+                  100% Private
+                </span>
+              </div>
+
+              <h3 class="text-lg font-bold text-slate-900 group-hover:text-blue-600 transition-colors">
+                {tool.data.name}
+              </h3>
+              
+              <p class="mt-2 text-sm text-slate-600 leading-relaxed">
+                {tool.data.shortDescription}
+              </p>
             </div>
 
-            <h3 class="text-lg font-bold text-slate-900 group-hover:text-blue-600 transition-colors">
-              {tool.name}
-            </h3>
-            
-            <p class="mt-2 text-sm text-slate-600 leading-relaxed">
-              {tool.description}
-            </p>
-          </div>
-
-          <div class="mt-6 flex items-center gap-1.5 text-sm font-semibold text-blue-600 group-hover:text-blue-700">
-            <span>Open Tool</span>
-            <svg class="h-4 w-4 transition-transform group-hover:translate-x-1" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <line x1="5" y1="12" x2="19" y2="12"></line>
-              <polyline points="12 5 19 12 12 19"></polyline>
-            </svg>
-          </div>
-        </a>
-      ))}
+            <div class="mt-6 flex items-center gap-1.5 text-sm font-semibold text-blue-600 group-hover:text-blue-700">
+              <span>Open Tool</span>
+              <svg class="h-4 w-4 transition-transform group-hover:translate-x-1" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <line x1="5" y1="12" x2="19" y2="12"></line>
+                <polyline points="12 5 19 12 12 19"></polyline>
+              </svg>
+            </div>
+          </a>
+        );
+      })}
     </div>
   </section>
 
@@ -142,11 +123,11 @@ const categories = [
 
       <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
         {categories.map((cat) => (
-          <div class="rounded-xl border border-slate-200 bg-white p-5 shadow-xs transition hover:border-slate-300">
+          <a href={cat.href} class="rounded-xl border border-slate-200 bg-white p-5 shadow-xs transition hover:border-blue-300">
             <h3 class="font-bold text-slate-900 text-base">{cat.name}</h3>
             <p class="mt-1 text-xs text-slate-500">{cat.desc}</p>
             <div class="mt-4 text-xs font-semibold text-blue-600">{cat.count}</div>
-          </div>
+          </a>
         ))}
       </div>
     </div>

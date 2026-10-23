@@ -1,0 +1,51 @@
+{
+  "name": "URL Encoder & SEO Slug Generator",
+  "shortDescription": "Generate clean, URL-friendly slugs and encode or decode web query parameters.",
+  "category": "Text & Content",
+  "categoryId": "text",
+  "executionMode": "client",
+  "implementationId": "url-slug-converter",
+  "privacyNotice": "100% Client-Side. Slugs and encoded URLs are produced strictly in browser memory.",
+  "howToUse": [
+    {
+      "step": "1. Select Function",
+      "text": "Choose 'SEO Slug' for clean blog/page URLs, 'URL Encode' for query strings, or 'URL Decode' to unescape."
+    },
+    {
+      "step": "2. Paste Input",
+      "text": "Paste your article title, special characters, or encoded URL string into the top box."
+    },
+    {
+      "step": "3. Copy Result",
+      "text": "Use the Copy button to quickly grab the formatted URL or slug."
+    }
+  ],
+  "features": [
+    "Converts titles into lowercase, hyphen-separated SEO slugs",
+    "Strips accents and diacritics cleanly for universal URL safety",
+    "Encodes and decodes URI components using standard RFC 3986 rules",
+    "Real-time instant calculation",
+    "100% client-side privacy guarantee"
+  ],
+  "limitations": [
+    "Slugs strip non-alphanumeric punctuation and ASCII symbols automatically"
+  ],
+  "faqs": [
+    {
+      "q": "Why is an SEO-friendly slug important?",
+      "a": "Clean, human-readable URLs improve user click-through rates and help search engine crawlers understand page content quickly."
+    },
+    {
+      "q": "What is the difference between URL encoding and slug generation?",
+      "a": "URL encoding converts characters into percent-escaped codes (e.g. %20 for space), whereas a slug replaces spaces with hyphens and removes special characters entirely."
+    }
+  ],
+  "relatedTools": [
+    "/tools/word-counter",
+    "/tools/base64-converter"
+  ],
+  "seoTitle": "Free URL Encoder & SEO Slug Generator — ToolXDev",
+  "seoDescription": "Create clean URL slugs and encode/decode web query parameters online. Fast, browser-side tool with instant results.",
+  "status": "published",
+  "featured": false
+}

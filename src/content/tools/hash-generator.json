@@ -1,0 +1,52 @@
+{
+  "name": "Cryptographic Hash Generator",
+  "shortDescription": "Generate secure SHA-256, SHA-512, SHA-384, and SHA-1 checksums locally.",
+  "category": "Developer Tools",
+  "categoryId": "developer",
+  "executionMode": "client",
+  "implementationId": "hash-generator",
+  "privacyNotice": "100% Client-Side. Calculations use hardware-accelerated Web Crypto API in your browser without transmitting your input.",
+  "howToUse": [
+    {
+      "step": "1. Enter Text",
+      "text": "Paste passwords, tokens, or plain text into the input field."
+    },
+    {
+      "step": "2. Instant Generation",
+      "text": "SHA-256, SHA-512, SHA-384, and SHA-1 digests update simultaneously as you type."
+    },
+    {
+      "step": "3. Copy Digest",
+      "text": "Click the 'Copy' button beside any hash algorithm to copy the hex checksum."
+    }
+  ],
+  "features": [
+    "Native Web Crypto API hardware acceleration",
+    "Simultaneous calculation of SHA-256, SHA-512, SHA-384, and legacy SHA-1",
+    "Accurate hexadecimal digest formatting",
+    "Zero network traffic for maximum security with passwords or private tokens",
+    "Works completely offline once cached"
+  ],
+  "limitations": [
+    "Processes text strings in UTF-8 encoding",
+    "SHA-1 is provided for legacy checksum verification only and should not be used for new security designs"
+  ],
+  "faqs": [
+    {
+      "q": "Why is client-side hashing safer?",
+      "a": "Because sensitive text or passwords never leave your machine, preventing interception by intermediate proxies or server logs."
+    },
+    {
+      "q": "Which hash algorithm should I use for modern applications?",
+      "a": "SHA-256 and SHA-512 are current cryptographic industry standards for checksum integrity and signature verification."
+    }
+  ],
+  "relatedTools": [
+    "/tools/base64-converter",
+    "/tools/json-formatter"
+  ],
+  "seoTitle": "Free Online Hash Generator (SHA-256, SHA-512) — ToolXDev",
+  "seoDescription": "Generate SHA-256, SHA-512, SHA-384, and SHA-1 cryptographic hashes instantly and privately with Web Crypto API.",
+  "status": "published",
+  "featured": false
+}

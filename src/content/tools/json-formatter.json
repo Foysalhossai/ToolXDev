@@ -1,0 +1,53 @@
+{
+  "name": "JSON Formatter & Validator",
+  "shortDescription": "Beautify, validate, format, and minify JSON strings with error checking.",
+  "category": "Developer Tools",
+  "categoryId": "developer",
+  "executionMode": "client",
+  "implementationId": "json-formatter",
+  "privacyNotice": "100% Client-Side. Your JSON payloads, keys, and values never leave your browser.",
+  "howToUse": [
+    {
+      "step": "1. Paste Raw JSON",
+      "text": "Paste your raw, minified, or unformatted JSON text into the editor."
+    },
+    {
+      "step": "2. Choose Formatting Style",
+      "text": "Click 'Format 2 Spaces', 'Format 4 Spaces', or 'Minify' based on your requirement."
+    },
+    {
+      "step": "3. Check Errors & Copy",
+      "text": "Inspect syntax errors on the alert banner if invalid, or copy the formatted JSON with one click."
+    }
+  ],
+  "features": [
+    "Instant syntax validation with descriptive error locations",
+    "2-space and 4-space tree indentation options",
+    "High-speed minification for API payload reduction",
+    "Payload byte size counter and line numbering",
+    "Sample JSON template for quick testing",
+    "Strict client-side execution keeping API keys and secrets private"
+  ],
+  "limitations": [
+    "Validates standard RFC 8259 JSON specifications (trailing commas and unquoted keys are highlighted as errors)",
+    "Extremely large payloads (>50MB) may hit browser memory thresholds"
+  ],
+  "faqs": [
+    {
+      "q": "Is it safe to format JSON containing production API keys?",
+      "a": "Yes. ToolXDev executes all JSON formatting locally in your browser sandbox. No data is sent over the network."
+    },
+    {
+      "q": "Why does JSON validation fail on my input?",
+      "a": "Common issues include unescaped quotes, trailing commas in objects or arrays, or missing quotation marks around property names."
+    }
+  ],
+  "relatedTools": [
+    "/tools/base64-converter",
+    "/tools/hash-generator"
+  ],
+  "seoTitle": "Free Online JSON Formatter & Validator — ToolXDev",
+  "seoDescription": "Beautify, validate, and minify JSON strings instantly in your browser. 100% private, client-side, and ad-free.",
+  "status": "published",
+  "featured": true
+}

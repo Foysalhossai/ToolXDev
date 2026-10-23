@@ -1,0 +1,53 @@
+{
+  "name": "Client-Side Image Compressor",
+  "shortDescription": "Compress PNG, JPEG, and WebP files without uploading to external servers.",
+  "category": "Image & Media",
+  "categoryId": "image",
+  "executionMode": "client",
+  "implementationId": "image-compressor",
+  "privacyNotice": "100% Client-Side. Images are rendered and encoded strictly on your device using HTML5 Canvas APIs.",
+  "howToUse": [
+    {
+      "step": "1. Select or Drop Image",
+      "text": "Drag and drop your JPEG, PNG, or WebP photo into the upload box or browse from your device."
+    },
+    {
+      "step": "2. Adjust Target Quality",
+      "text": "Use the slider to set target compression quality (e.g. 70%-80% provides the optimal balance)."
+    },
+    {
+      "step": "3. Compare & Download",
+      "text": "Preview the visual quality side-by-side with original and click Download."
+    }
+  ],
+  "features": [
+    "Zero upload delay: processing begins instantly on your local GPU/CPU",
+    "Real-time visual comparison between original and compressed output",
+    "Calculates percentage of storage savings dynamically",
+    "Multi-format conversion to WebP, JPEG, and PNG",
+    "Works offline once the page has loaded",
+    "No file size caps imposed by remote server upload limits"
+  ],
+  "limitations": [
+    "Does not compress vector SVG files (use an SVG minifier for vectors)",
+    "Extremely high-resolution images (>40MP) may consume significant browser memory"
+  ],
+  "faqs": [
+    {
+      "q": "Are my confidential photos uploaded to any server?",
+      "a": "No. Modern HTML5 Canvas features allow us to read, scale, and compress images entirely on your computer or phone."
+    },
+    {
+      "q": "Which output format gives the smallest file size?",
+      "a": "WebP usually delivers 25% to 35% better compression than traditional JPEG at equivalent perceived visual quality."
+    }
+  ],
+  "relatedTools": [
+    "/tools/base64-converter",
+    "/tools/url-slug-converter"
+  ],
+  "seoTitle": "Free Client-Side Image Compressor (WebP/JPEG/PNG) — ToolXDev",
+  "seoDescription": "Compress and convert images online without uploading to any server. Fast, secure HTML5 Canvas compression for developers.",
+  "status": "published",
+  "featured": true
+}
